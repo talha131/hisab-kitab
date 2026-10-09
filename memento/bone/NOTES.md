@@ -9,7 +9,8 @@
 - `../../docs/meat.html` — the report page, served by GitHub Pages at
   <https://talha131.github.io/hisab-kitab/meat.html>. Renders the purchase
   from the link fragment (never sent to the server), with "Share image" (PNG
-  via the share sheet) and "Save PDF" (print, A5).
+  via the share sheet), "Copy image" (PNG to the clipboard) and "Save PDF"
+  (print, A5).
 - `node preview.js` — runs the button script on sample entries, opens the
   page in headless Chrome as a phone, and writes the screen, the share image
   and the PDF to `preview/`.

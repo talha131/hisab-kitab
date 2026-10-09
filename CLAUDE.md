@@ -26,7 +26,8 @@ the purchase as a card to share as an image or save as a PDF. Repo:
 - `node tests/report-page.test.js` from the repo root.
 - `node preview.js` in each library folder writes `preview/` (gitignored):
   `<name>.png` (phone view), `<name>-share.png` (the Share image output) and
-  `<name>.pdf` (Save PDF, A5). Look at the PNGs after any page change; Urdu
+  `<name>.pdf` (Save PDF, A5). It also taps Copy image and fails unless a PNG
+  lands on the clipboard. Look at the PNGs after any page change; Urdu
   Nastaliq descenders easily collide with text below them.
 
 ## Deploy
