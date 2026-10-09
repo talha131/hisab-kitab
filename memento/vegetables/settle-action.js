@@ -13,6 +13,12 @@ function text(e, name) {
   return v == null ? "" : String(v);
 }
 
+// Group is typed by hand: treat anything starting with پ (پھل, "پھل ", پهل...)
+// or "fruit" as fruit, everything else as a vegetable.
+function isFruit(e) {
+  return /^\s*(\u067e|fruit)/i.test(text(e, "Group"));
+}
+
 if (!history) {
   // Nothing is cleared unless it can be saved first.
   message("Vegetable History library not found. Allow this script to access it.");
@@ -29,7 +35,7 @@ if (!history) {
       "Date": today,
       "Name": text(e, "Name"),
       "English": text(e, "English"),
-      "Group": text(e, "Group"),
+      "Group": isFruit(e) ? "پھل" : "سبزی",
       "Price": Math.round(price),
       "Qty": qty > 0 ? qty : null,
       "Unit": text(e, "Unit")

@@ -12,6 +12,11 @@ function text(e, name) {
   var v = e.field(name);
   return v == null ? "" : String(v);
 }
+// Group is typed by hand: treat anything starting with پ (پھل, "پھل ", پهل...)
+// or "fruit" as fruit, everything else as a vegetable.
+function isFruit(e) {
+  return /^\s*(\u067e|fruit)/i.test(text(e, "Group"));
+}
 function pad(n) {
   return (n < 10 ? "0" : "") + n;
 }
@@ -24,7 +29,7 @@ for (var i = 0; i < entries.length; i++) {
   if (!(price > 0)) continue;
   bought.push({
     order: num(e, "Order"),
-    row: [text(e, "Group") === "پھل" ? "p" : "s", text(e, "Name"), text(e, "English"),
+    row: [isFruit(e) ? "p" : "s", text(e, "Name"), text(e, "English"),
           Math.round(price), num(e, "Qty"), text(e, "Unit")]
   });
 }
