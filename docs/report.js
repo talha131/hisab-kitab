@@ -68,7 +68,6 @@ var Report = (function () {
     return tr;
   }
 
-  // Wires the Share image, Copy image and Save PDF buttons. fileName() names the PNG.
   // The report card as a PNG blob, once the Urdu font has loaded.
   function renderImage() {
     return document.fonts.ready.then(function () {
@@ -76,6 +75,7 @@ var Report = (function () {
     });
   }
 
+  // Wires the Share image, Copy image and Save PDF buttons. fileName() names the PNG.
   function setupActions(fileName) {
     var status = document.getElementById("status");
     document.getElementById("share").addEventListener("click", function () {
