@@ -7,7 +7,7 @@ const vm = require("vm");
 const { preview } = require("../lib/headless");
 
 const scenarios = {
-  // Your meat example plus a manual-price line and a discount, marked paid.
+  // A sample purchase with a manual-price line and a discount, marked paid.
   "discount-paid": {
     "Date": new Date(2026, 9, 8), "Paid": true, "Discount": 500,
     "Weight Boneless": 3, "Rate Boneless": 1800,
