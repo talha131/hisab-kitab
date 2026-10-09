@@ -1,7 +1,7 @@
 // Report · رپورٹ — Button field script.
 // Opens this purchase's report page in the browser. The purchase travels in
 // the link after "#", which the browser never sends to the server.
-var PAGE = "https://talha131.github.io/ghar-hisaab/meat.html";
+var PAGE = "https://talha131.github.io/hisab-kitab/meat.html";
 
 // [code the page knows, quantity field, rate field, manual price field]
 var items = [
