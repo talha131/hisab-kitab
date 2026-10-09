@@ -47,7 +47,8 @@ function serve() {
   const server = http.createServer((req, res) => {
     const file = path.join(SITE, decodeURIComponent(req.url.split("?")[0]));
     if (!file.startsWith(SITE) || !fs.existsSync(file)) { res.writeHead(404).end(); return; }
-    res.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end(fs.readFileSync(file));
+    const type = { ".css": "text/css", ".js": "text/javascript" }[path.extname(file)] || "text/html";
+    res.writeHead(200, { "content-type": type + "; charset=utf-8" }).end(fs.readFileSync(file));
   });
   return new Promise((resolve) => server.listen(0, "127.0.0.1", () => resolve(server)));
 }
