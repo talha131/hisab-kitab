@@ -27,6 +27,7 @@ way, how work was done, and open ideas.
 - `memento/lib/headless.js` — shared preview code (local server + headless
   Chrome emulating a phone).
 - `tests/report-page.test.js` — tests for the helpers in `docs/report.js`.
+- `tools/phone/ph.sh` — adb helpers for driving the phone (see its header).
 
 ## Test and preview
 

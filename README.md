@@ -18,6 +18,7 @@ travels in the link after `#`, so it is never sent to the server.
   `Vegetable History`: CSV and action scripts
   ([notes](memento/vegetables/NOTES.md)).
 - `memento/lib/` — shared preview code.
+- `tools/phone/` — adb helpers for setting up the phone.
 
 Each library folder has tests (`node test.js`) and a preview tool
 (`node preview.js`); `node tests/report-page.test.js` tests the pages' helpers.
