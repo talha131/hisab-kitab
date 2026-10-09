@@ -15,6 +15,7 @@ var lines = [
 var total = 0;
 for (var i = 0; i < lines.length; i++) {
   var manual = field(lines[i][2]) || 0;
-  total += manual > 0 ? manual : (field(lines[i][0]) || 0) * (field(lines[i][1]) || 0);
+  // Whole rupees per line, as on the report page.
+  total += Math.round(manual > 0 ? manual : (field(lines[i][0]) || 0) * (field(lines[i][1]) || 0));
 }
-total - (field("Discount") || 0);
+total - Math.round(field("Discount") || 0);
