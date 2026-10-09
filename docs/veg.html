@@ -57,7 +57,9 @@
 
   function add(rows, l) {
     var qty = l.qty > 0 ? l.qty + (l.unit ? " " + Report.isolate(l.unit) : "") : "";
-    rows.appendChild(Report.itemRow(l.urdu, l.english, [qty && ["w", qty]], l.price));
+    var tr = Report.itemRow(l.urdu, l.english, [qty && ["w", qty]], l.price);
+    if (l.fruit) tr.className = "fruit";
+    rows.appendChild(tr);
     return l.price;
   }
 
