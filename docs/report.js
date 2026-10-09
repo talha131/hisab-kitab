@@ -10,6 +10,17 @@ var Report = (function () {
   function date(text) {
     return /^\d{4}-\d{2}-\d{2}$/.test(text || "") ? text : "";
   }
+  var DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  // "2026-10-08" -> "Thursday, Oct 08, 2026". Read as a local date so the
+  // weekday never shifts with the time zone; "" for anything invalid.
+  function humanDate(text) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text || "");
+    if (!m) return "";
+    var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    if (d.getMonth() !== Number(m[2]) - 1 || d.getDate() !== Number(m[3])) return "";
+    return DAYS[d.getDay()] + ", " + MONTHS[d.getMonth()] + " " + m[3] + ", " + m[1];
+  }
   function el(tag, cls, text) {
     var node = document.createElement(tag);
     if (cls) node.className = cls;
@@ -90,7 +101,7 @@ var Report = (function () {
   }
 
   return {
-    rs: rs, amount: amount, date: date, el: el, isolate: isolate,
+    rs: rs, amount: amount, date: date, humanDate: humanDate, el: el, isolate: isolate,
     itemRow: itemRow, sumRow: sumRow, emptyRow: emptyRow,
     setupActions: setupActions, start: start
   };

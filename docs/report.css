@@ -19,7 +19,7 @@ main { max-width: 440px; margin: 0 auto; padding: 16px; }
 #capture { background: #ffffff; padding: 10px; border-radius: 16px; }
 .card { border: 1.5px solid var(--brand); border-radius: 14px; overflow: hidden; }
 .title { background: var(--brand); color: #ffffff; text-align: center; padding: 10px 12px 4px; }
-.title .date { font-family: var(--latin); font-size: 24px; font-weight: 800; direction: ltr; }
+.title .date { font-family: var(--latin); font-size: 21px; font-weight: 800; direction: ltr; }
 .title .label { font-size: 16px; line-height: 1.9; color: var(--brand-soft); }
 
 table { width: 100%; border-collapse: collapse; }

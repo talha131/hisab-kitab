@@ -61,7 +61,7 @@
   }
 
   function render(data) {
-    document.getElementById("date").textContent = data.date;
+    document.getElementById("date").textContent = Report.humanDate(data.date);
     var rows = document.getElementById("rows");
     rows.textContent = "";
     var total = 0;
