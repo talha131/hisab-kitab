@@ -55,9 +55,9 @@ function actionHash(rows, file = "report-action.js", current = undefined) {
 
 const pages = Object.fromEntries(Object.entries(scenarios).map(([name, rows]) => [name, "veg.html#" + actionHash(rows)]));
 
-// The same purchase as Settle saves it into Vegetable History (no Order,
-// newest first), re-opened from one of its entries a day later.
-const history = scenarios["with-fruit"].slice().reverse().map(({ Order, ...rest }) =>
+// The same purchase as it lists in Vegetable History on the phone (no Order,
+// table order), re-opened from one of its entries a day later.
+const history = scenarios["with-fruit"].slice().sort((a, b) => a.Order - b.Order).map(({ Order, ...rest }) =>
   ({ ...rest, Date: new Date(2026, 9, 8, 18, 30) }));
 pages["history"] = "veg.html#" + actionHash(history, "history-report-action.js", 0);
 preview(pages, path.join(__dirname, "preview")).catch((e) => { console.error(e); process.exit(1); });

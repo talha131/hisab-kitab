@@ -178,6 +178,7 @@ const cases = [
 ];
 
 // Vegetable History as Memento lists it: newest first. Two shopping days.
+// The report keeps this listing order (see history-report-action.js).
 const historySample = () => table([
   { Date: new Date(2026, 9, 9, 21, 40), Name: "آلو", English: "Potato", Group: "سبزی", Unit: "کلو", Price: 150, Qty: 2 },
   { Date: new Date(2026, 9, 8, 23, 59), Name: "پپیتا", English: "Papaya", Group: "پھل", Unit: "عدد", Price: 300, Qty: null },
@@ -188,17 +189,17 @@ const historySample = () => table([
 const linkDate = (url) => new URLSearchParams(url.split("#")[1]).get("d");
 
 cases.push(
-  ["history: entry action reports every item of that day, oldest first", () => {
+  ["history: entry action reports every item of that day, in listing order", () => {
     const entries = historySample();
     const { opened } = run("history-report-action.js", entries, { current: entries[3] });
     assert.strictEqual(opened.length, 1);
     assert.ok(opened[0].startsWith("https://talha131.github.io/hisab-kitab/veg.html#d="));
     assert.strictEqual(linkDate(opened[0]), "2026-10-08", "purchase day, not today");
     assert.deepStrictEqual(linkRows(opened[0]), [
-      ["s", "آلو", "Potato", 700, 5, "کلو"],
-      ["p", "انار", "Pomegranate", 600, 1, "کلو"],
-      ["s", "Mint", "Mint", 40, 2, "گڈی"],
       ["p", "پپیتا", "Papaya", 300, 0, "عدد"],
+      ["s", "Mint", "Mint", 40, 2, "گڈی"],
+      ["p", "انار", "Pomegranate", 600, 1, "کلو"],
+      ["s", "آلو", "Potato", 700, 5, "کلو"],
     ]);
   }],
   ["history: other days are left out", () => {
@@ -215,7 +216,7 @@ cases.push(
     ]);
     const { opened } = run("history-report-action.js", entries, { current: entries[0] });
     assert.strictEqual(linkDate(opened[0]), "2026-10-08");
-    assert.deepStrictEqual(linkRows(opened[0]).map((r) => r[1]), ["پیاز", "آلو"]);
+    assert.deepStrictEqual(linkRows(opened[0]).map((r) => r[1]), ["آلو", "پیاز"]);
   }],
   ["history: fruit variants and zero prices", () => {
     const entries = table([
@@ -224,7 +225,7 @@ cases.push(
       { Date: new Date(2026, 9, 8), Name: "ادرک", Group: "", Price: 0 },
     ]);
     const { opened } = run("history-report-action.js", entries, { current: entries[0] });
-    assert.deepStrictEqual(linkRows(opened[0]).map((r) => [r[0], r[1]]), [["p", "سیب"], ["p", "کیلا"]]);
+    assert.deepStrictEqual(linkRows(opened[0]).map((r) => [r[0], r[1]]), [["p", "کیلا"], ["p", "سیب"]]);
   }],
   ["history: library action reports the most recent day", () => {
     const { opened } = run("history-report-action.js", historySample());

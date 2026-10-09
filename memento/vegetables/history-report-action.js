@@ -34,12 +34,13 @@ function day(e) {
 var current = null;
 try { current = entry(); } catch (err) { current = null; }
 
-// Memento lists entries newest first; copy them oldest first (a plain loop, in
-// case entries() is not a real JS array) so a day's items come out in the
-// order Settle saved them.
+// Keep Memento's listing order. On the phone a settled day already lists in
+// vegetable-table order: Settle walks the table newest-first and saves in that
+// order, and History lists newest-first, so the two reversals cancel out.
+// (Copied with a plain loop in case entries() is not a real JS array.)
 var all = lib().entries();
 var entries = [];
-for (var n = all.length - 1; n >= 0; n--) entries.push(all[n]);
+for (var n = 0; n < all.length; n++) entries.push(all[n]);
 
 var target = current ? day(current) : "";
 if (!current) {
