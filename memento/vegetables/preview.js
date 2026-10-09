@@ -1,5 +1,6 @@
-// Runs report-action.js on sample tables and previews the vegetable report
-// page for each link it builds (see ../lib/headless.js for what gets written).
+// Runs report-action.js on sample tables, and history-report-action.js on a
+// sample Vegetable History, and previews the vegetable report page for each
+// link they build (see ../lib/headless.js for what gets written).
 // Usage: node preview.js
 const fs = require("fs");
 const path = require("path");
@@ -36,18 +37,27 @@ const scenarios = {
   ],
 };
 
-function actionHash(rows) {
-  const code = fs.readFileSync(path.join(__dirname, "report-action.js"), "utf8");
+// `current` makes it an entry action (the opened entry); omit it for library actions.
+function actionHash(rows, file = "report-action.js", current = undefined) {
+  const code = fs.readFileSync(path.join(__dirname, file), "utf8");
   const entries = rows.map((values) => ({ field: (n) => (n in values ? values[n] : null) }));
   let url;
-  vm.runInNewContext(code, {
+  const context = {
     lib: () => ({ entries: () => entries }),
     intent: () => ({ data: (u) => { url = u; }, send: () => {} }),
     message: () => {},
     encodeURIComponent, JSON, Date,
-  });
+  };
+  if (current !== undefined) context.entry = () => entries[current];
+  vm.runInNewContext(code, context);
   return url.split("#")[1];
 }
 
 const pages = Object.fromEntries(Object.entries(scenarios).map(([name, rows]) => [name, "veg.html#" + actionHash(rows)]));
+
+// The same purchase as Settle saves it into Vegetable History (no Order,
+// newest first), re-opened from one of its entries a day later.
+const history = scenarios["with-fruit"].slice().reverse().map(({ Order, ...rest }) =>
+  ({ ...rest, Date: new Date(2026, 9, 8, 18, 30) }));
+pages["history"] = "veg.html#" + actionHash(history, "history-report-action.js", 0);
 preview(pages, path.join(__dirname, "preview")).catch((e) => { console.error(e); process.exit(1); });
