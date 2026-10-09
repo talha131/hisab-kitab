@@ -5,6 +5,11 @@ Android app; a Memento script opens a report page (GitHub Pages) that renders
 the purchase as a card to share or copy as an image, or save as a PDF. Repo:
 `talha131/hisab-kitab`, default branch `master`.
 
+Read `MEMORY.md` first: the state on the phone, why things are built this
+way, how work was done, and open ideas.
+
+@MEMORY.md
+
 ## Layout
 
 - `docs/` — the report pages, served by GitHub Pages from `master` `/docs`:
