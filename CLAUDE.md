@@ -2,7 +2,7 @@
 
 Household expense reports. Purchases are recorded in the Memento Database
 Android app; a Memento script opens a report page (GitHub Pages) that renders
-the purchase as a card to share as an image or save as a PDF. Repo:
+the purchase as a card to share or copy as an image, or save as a PDF. Repo:
 `talha131/hisab-kitab`, default branch `master`.
 
 ## Layout
@@ -25,10 +25,29 @@ the purchase as a card to share as an image or save as a PDF. Repo:
   `libByName`, `intent`, `message`).
 - `node tests/report-page.test.js` from the repo root.
 - `node preview.js` in each library folder writes `preview/` (gitignored):
-  `<name>.png` (phone view), `<name>-share.png` (the Share image output) and
+  `<name>.png` (phone view), `<name>-share.png` (what Share image and Copy
+  image produce, rendered by the page's own `Report.renderImage`) and
   `<name>.pdf` (Save PDF, A5). It also taps Copy image and fails unless a PNG
   lands on the clipboard. Look at the PNGs after any page change; Urdu
-  Nastaliq descenders easily collide with text below them.
+  Nastaliq descenders easily collide with text below them. Needs Google Chrome
+  at `/Applications/Google Chrome.app` (macOS) and Node 22+ (built-in
+  `WebSocket`).
+
+## Adding a library
+
+1. `docs/<x>.html`: load `report.css` and `report.js`, parse the fragment, and
+   build rows with `Report.itemRow` / `Report.sumRow`; wire buttons with
+   `Report.setupActions` and render with `Report.start`. Treat every value
+   from the fragment as untrusted text.
+2. `memento/<x>/`: the Memento script (ES5) that opens
+   `https://talha131.github.io/hisab-kitab/<x>.html#…` with the data after
+   `#`, via `intent("android.intent.action.VIEW")`.
+3. `memento/<x>/test.js`: run the script with `vm` against stubbed Memento
+   globals and check the link it builds.
+4. `memento/<x>/preview.js`: build sample links and call
+   `require("../lib/headless").preview({ name: "<x>.html#…" }, outDir)`.
+5. `memento/<x>/NOTES.md`: exact phone setup (field names and types, scripts,
+   permissions). List the library in README and in Layout above.
 
 ## Deploy
 
