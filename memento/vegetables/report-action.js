@@ -29,7 +29,8 @@ for (var i = 0; i < entries.length; i++) {
   if (!(price > 0)) continue;
   bought.push({
     order: num(e, "Order"),
-    row: [isFruit(e) ? "p" : "s", text(e, "Name"), text(e, "English"),
+    // An item with no Urdu name still shows (and counts) under its English name.
+    row: [isFruit(e) ? "p" : "s", text(e, "Name") || text(e, "English") || "?", text(e, "English"),
           Math.round(price), num(e, "Qty"), text(e, "Unit")]
   });
 }

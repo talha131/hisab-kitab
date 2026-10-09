@@ -49,7 +49,7 @@
       if (!Array.isArray(r)) return null;
       return {
         fruit: r[0] === "p",
-        urdu: text(r[1], 60), english: text(r[2], 60),
+        urdu: text(r[1], 60) || text(r[2], 60), english: text(r[2], 60),
         price: amount(r[3]), qty: amount(r[4]), unit: text(r[5], 12)
       };
     }).filter(function (l) { return l && l.urdu && l.price > 0; });
