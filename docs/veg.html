@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>سبزی کا حساب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<link rel="stylesheet" href="report.css">
+</head>
+<body>
+<main>
+  <div id="capture">
+    <div class="card">
+      <div class="title">
+        <div class="date" id="date"></div>
+        <div class="label">سبزی کا حساب</div>
+      </div>
+      <table><tbody id="rows"></tbody></table>
+    </div>
+  </div>
+  <div class="actions">
+    <button id="share" type="button">Share image</button>
+    <button id="pdf" type="button">Save PDF</button>
+  </div>
+  <div id="status"></div>
+</main>
+
+<script src="report.js"></script>
+<script>
+  // Link format (memento/vegetables/report-action.js):
+  // #d=YYYY-MM-DD&v=[[group, urdu, english, price, qty, unit], ...]
+  // group is "s" for سبزی (vegetables) or "p" for پھل (fruit).
+  var rs = Report.rs, amount = Report.amount;
+
+  function text(v, max) {
+    return typeof v === "string" ? v.slice(0, max) : "";
+  }
+
+  function parse(hash) {
+    var params = new URLSearchParams(hash.replace(/^#/, ""));
+    var raw;
+    try { raw = JSON.parse(params.get("v") || "[]"); } catch (e) { raw = []; }
+    var lines = (Array.isArray(raw) ? raw : []).map(function (r) {
+      if (!Array.isArray(r)) return null;
+      return {
+        fruit: r[0] === "p",
+        urdu: text(r[1], 60), english: text(r[2], 60),
+        price: amount(r[3]), qty: amount(r[4]), unit: text(r[5], 12)
+      };
+    }).filter(function (l) { return l && l.urdu && l.price > 0; });
+    return { date: Report.date(params.get("d")), lines: lines };
+  }
+
+  function add(rows, l) {
+    var qty = l.qty > 0 ? l.qty + (l.unit ? " " + Report.isolate(l.unit) : "") : "";
+    rows.appendChild(Report.itemRow(l.urdu, l.english, [qty && ["w", qty]], l.price));
+    return l.price;
+  }
+
+  function render(data) {
+    document.getElementById("date").textContent = data.date;
+    var rows = document.getElementById("rows");
+    rows.textContent = "";
+    var veg = data.lines.filter(function (l) { return !l.fruit; });
+    var fruit = data.lines.filter(function (l) { return l.fruit; });
+    var vegTotal = 0, total = 0;
+    veg.forEach(function (l) { vegTotal += add(rows, l); });
+    // With fruit after the vegetables, show the vegetable subtotal first.
+    if (veg.length && fruit.length) rows.appendChild(Report.sumRow("subtotal", "کل سبزی", rs(vegTotal)));
+    total = vegTotal;
+    fruit.forEach(function (l) { total += add(rows, l); });
+    if (!data.lines.length) rows.appendChild(Report.emptyRow());
+    rows.appendChild(Report.sumRow("net", "ٹوٹل رقم", rs(total)));
+    document.title = "سبزی کا حساب " + data.date;
+  }
+
+  Report.setupActions(function () { return "vegetables-" + (parse(location.hash).date || "report") + ".png"; });
+  Report.start(parse, render);
+</script>
+</body>
+</html>
