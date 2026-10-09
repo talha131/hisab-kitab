@@ -37,8 +37,9 @@
   // group is "s" for سبزی (vegetables) or "p" for پھل (fruit).
   var rs = Report.rs, amount = Report.amount;
 
+  // Cut by characters, not UTF-16 units, so an emoji is never split in half.
   function text(v, max) {
-    return typeof v === "string" ? v.slice(0, max) : "";
+    return typeof v === "string" ? Array.from(v).slice(0, max).join("") : "";
   }
 
   function parse(hash) {
