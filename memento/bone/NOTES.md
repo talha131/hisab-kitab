@@ -8,7 +8,7 @@
   the hosted `docs/meat.html#…` in the browser with only the meats bought, as
   `code~weight~rate~price` items.
 - `../../docs/meat.html` — the report page, served by GitHub Pages at
-  https://smtalham.github.io/ghar-hisaab/meat.html: renders the purchase from the
+  https://talha131.github.io/ghar-hisaab/meat.html: renders the purchase from the
   link fragment (never sent to the server), "Share image" (PNG via the share
   sheet) and "Save PDF" (print, A5).
 - `node preview.js` — runs the button script on sample entries, opens the
