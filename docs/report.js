@@ -47,9 +47,12 @@ var Report = (function () {
     tr.appendChild(amt);
     return tr;
   }
-  function sumRow(cls, label, value) {
+  // A totals row: Urdu label with its English term below, and the amount.
+  function sumRow(cls, label, english, value) {
     var tr = el("tr", "sum " + cls);
-    var l = el("td", "label", label);
+    var l = el("td", "label");
+    l.appendChild(el("div", "ur", label));
+    l.appendChild(el("div", "en", english));
     l.colSpan = 2;
     tr.appendChild(l);
     var a = el("td", "amt");

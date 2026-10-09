@@ -70,11 +70,11 @@
     var vegTotal = 0, total = 0;
     veg.forEach(function (l) { vegTotal += add(rows, l); });
     // With fruit after the vegetables, show the vegetable subtotal first.
-    if (veg.length && fruit.length) rows.appendChild(Report.sumRow("subtotal", "کل سبزی", rs(vegTotal)));
+    if (veg.length && fruit.length) rows.appendChild(Report.sumRow("subtotal", "کل سبزی", "Vegetables subtotal", rs(vegTotal)));
     total = vegTotal;
     fruit.forEach(function (l) { total += add(rows, l); });
     if (!data.lines.length) rows.appendChild(Report.emptyRow());
-    rows.appendChild(Report.sumRow("net", "ٹوٹل رقم", rs(total)));
+    rows.appendChild(Report.sumRow("net", "کُل رقم", "Total", rs(total)));
     document.title = "سبزی کا حساب " + data.date;
   }
 

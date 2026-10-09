@@ -74,11 +74,12 @@
       ], l.price));
     });
     if (!data.lines.length) rows.appendChild(Report.emptyRow());
-    if (data.discount > 0) {
-      rows.appendChild(Report.sumRow("subtotal", "کل رقم", rs(total)));
-      rows.appendChild(Report.sumRow("discount", "رعایت", "− " + rs(data.discount)));
+    var discounted = data.discount > 0;
+    if (discounted) {
+      rows.appendChild(Report.sumRow("subtotal", "کل رقم", "Gross total", rs(total)));
+      rows.appendChild(Report.sumRow("discount", "رعایت", "Discount", "− " + rs(data.discount)));
     }
-    rows.appendChild(Report.sumRow("net", "ٹوٹل رقم", rs(total - data.discount)));
+    rows.appendChild(Report.sumRow("net", "کُل رقم", discounted ? "Net total" : "Total", rs(total - data.discount)));
     document.getElementById("paid").hidden = !data.paid;
     document.title = "گوشت کا حساب " + data.date;
   }
