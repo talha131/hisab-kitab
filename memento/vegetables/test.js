@@ -137,9 +137,39 @@ const cases = [
     assert.deepStrictEqual(linkRows(opened[0]).map((r) => [r[1], r[3]]), [["Iceberg", 150], ["?", 50]]);
   }],
   ["settle: nothing priced", () => {
-    const { history, messages } = run("settle-action.js", table([{ Order: 1, Name: "آلو", Price: null }]));
+    const { history, messages, dialogs } = run("settle-action.js", table([{ Order: 1, Name: "آلو", Price: null }]));
     assert.strictEqual(history.length, 0);
     assert.deepStrictEqual(messages, ["Nothing to settle"]);
+    assert.strictEqual(dialogs.length, 0, "no confirmation when there is nothing to settle");
+  }],
+  ["settle: asks first, naming how many items", () => {
+    const { dialogs } = run("settle-action.js", sample(), { answer: null });
+    assert.strictEqual(dialogs.length, 1);
+    assert.strictEqual(dialogs[0].title, "Settle?");
+    assert.strictEqual(dialogs[0].text, "Save 4 items to Vegetable History and clear their prices?");
+    assert.deepStrictEqual(Object.keys(dialogs[0].buttons), ["Settle", "Cancel"]);
+    const one = run("settle-action.js", table([{ Order: 1, Name: "آلو", Price: 700 }]), { answer: null });
+    assert.strictEqual(one.dialogs[0].text, "Save 1 item to Vegetable History and clear their prices?");
+  }],
+  ["settle: unanswered dialog saves and clears nothing", () => {
+    const entries = sample();
+    const { history, messages } = run("settle-action.js", entries, { answer: null });
+    assert.strictEqual(history.length, 0);
+    assert.deepStrictEqual(entries.map((e) => e.values.Price), [600, null, 50, 700, 600]);
+    assert.deepStrictEqual(messages, []);
+  }],
+  ["settle: Cancel saves and clears nothing", () => {
+    const entries = sample();
+    const { history, messages } = run("settle-action.js", entries, { answer: "Cancel" });
+    assert.strictEqual(history.length, 0);
+    assert.deepStrictEqual(entries.map((e) => [e.values.Price, e.values.Qty]),
+      [[600, 1], [null, null], [50, 4], [700, 5], [600, null]]);
+    assert.deepStrictEqual(messages, ["Cancelled"]);
+  }],
+  ["settle: missing history library shows no dialog", () => {
+    const { dialogs, history } = run("settle-action.js", sample(), { historyMissing: true });
+    assert.strictEqual(dialogs.length, 0);
+    assert.strictEqual(history.length, 0);
   }],
 ];
 
