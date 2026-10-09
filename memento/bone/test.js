@@ -50,6 +50,16 @@ const cases = [
       "Weight Bone-in": 5, "Rate Bone-in": 1500, "Discount": 400 }, 12500],
   ["net payable: no discount", "net-payable.js",
     { "Weight Boneless": 3, "Rate Boneless": 1800 }, 5400],
+
+  // Fractional weights: every line is rounded to whole rupees, as on the page.
+  ["price: rounded to whole rupees", "price-boneless.js",
+    { "Weight Boneless": 0.25, "Rate Boneless": 1850 }, 463],
+  ["grand total: sums rounded lines", "grand-total.js",
+    { "Weight Boneless": 0.25, "Rate Boneless": 1850,
+      "Weight Bone-in": 0.75, "Rate Bone-in": 1850 }, 1851],
+  ["net payable: sums rounded lines", "net-payable.js",
+    { "Weight Boneless": 0.25, "Rate Boneless": 1850,
+      "Weight Bone-in": 0.75, "Rate Bone-in": 1850, "Discount": 51 }, 1800],
 ];
 
 let failed = 0;
@@ -93,6 +103,8 @@ const buttonCases = [
   ["button: trotters use Qty", { "Qty Trotters": 4, "Rate Trotters": 300 }, { i: "tr~4~300~1200" }],
   ["button: discount and paid", { ...example, "Discount": 400, "Paid": true }, { disc: "400", paid: "1" }],
   ["button: empty purchase", {}, { d: "", i: "", disc: "0", paid: "0" }],
+  ["button: lines rounded like the Memento fields", { "Weight Boneless": 0.25, "Rate Boneless": 1850,
+    "Weight Bone-in": 0.75, "Rate Bone-in": 1850 }, { i: "bl~0.25~1850~463_bi~0.75~1850~1388" }],
 ];
 for (const [name, values, expected] of buttonCases) {
   try {
