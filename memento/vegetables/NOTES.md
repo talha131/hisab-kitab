@@ -26,9 +26,10 @@ was bought, optionally **Qty** and **Unit**, then run the actions.
 - `history-report-action.js` — **Report** action for `Vegetable History`:
   re-opens the same report page for a past (paid) shopping day, dated with
   the purchase day. Added as an entry action it reports the day of the opened
-  entry; added as a library action it reports the most recent day. It assumes
-  Memento lists entries newest first, so items appear in the order Settle
-  saved them (the page still puts vegetables before fruit).
+  entry; added as a library action it reports the most recent day. Items keep
+  Memento's listing order, which on the phone is the vegetable table's order
+  (checked on the device, Oct 2026); the page still puts vegetables before
+  fruit.
 - `node test.js` — tests the actions against a stubbed Memento API.
 - `node preview.js` — renders sample reports into `preview/`.
 
