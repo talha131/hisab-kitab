@@ -1,4 +1,4 @@
-// Report · رپورٹ — library action for the Sabzi library.
+// Report · رپورٹ — library action for the Vegetables 🥕🍆 library.
 // Opens today's report page with every vegetable that has a price, in table
 // order. The list travels in the link after "#", which the browser never
 // sends to the server.
