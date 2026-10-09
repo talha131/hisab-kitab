@@ -1,4 +1,8 @@
-# Sabzi (vegetables) library — Memento notes
+# Vegetables 🥕🍆 library — Memento notes
+
+The library was called `Sabzi` when it was set up; the name in Memento can
+change freely. `Vegetable History` must keep its exact name: Settle looks it
+up by name.
 
 One entry per vegetable; the library's table view is the shopping sheet.
 Fill **Price** (the amount paid for that item, not a rate per kg) for what
@@ -6,7 +10,7 @@ was bought, optionally **Qty** and **Unit**, then run the actions.
 
 ## Files
 
-- `vegetables.csv` — import to create the `Sabzi` library: Order, Name
+- `vegetables.csv` — import to create the `Vegetables 🥕🍆` library: Order, Name
   (Urdu), English, Group (سبزی / پھل), Unit, Price, Qty.
 - `report-action.js` — library action **Report**: opens
   <https://talha131.github.io/hisab-kitab/veg.html> with every priced row, in
@@ -25,7 +29,7 @@ was bought, optionally **Qty** and **Unit**, then run the actions.
 ## Setup in Memento (as done on the phone, Oct 2026)
 
 1. Add Library → Import from CSV → `vegetables.csv`. On the import screen:
-   name the library `Sabzi`, set Name's "Display as" to Entry name and
+   name the library (`Vegetables 🥕🍆`), set Name's "Display as" to Entry name and
    Order's to Regular field, Price → Integer, Qty → Real number. The import
    offers no dropdown types, so Group and Unit come in as Text.
 2. Edit library → Unit → Convert data type → Single-choice list. The
@@ -37,10 +41,13 @@ was bought, optionally **Qty** and **Unit**, then run the actions.
    menu → View: Table, Sort: by Order ASC.
 4. New library `Vegetable History`: Date (Date), Name (Text), English, Group,
    Unit (Text), Price (Integer), Qty (Real number). Date and Name are the
-   entry name.
-5. Sabzi → Automations → Scripts → + Action (place: Library) for Report and
+   entry name. To see each shopping day collected with its total: library
+   menu → Group: by Date; Edit library → Aggregation: Sum of Price.
+5. Vegetables 🥕🍆 → Automations → Scripts → + Action (place: Library) for Report and
    Settle. Paste the scripts from GitHub ("Copy" under the code's ⋯ menu,
    which keeps the Urdu intact). Permissions for scripts → Available
    libraries: only `Vegetable History`.
 
-The library actions run from the ▶ button in Sabzi's toolbar.
+The library actions run from the ▶ button in the library's toolbar. Both
+libraries are in Memento's cloud, so family members can be invited to share
+them.

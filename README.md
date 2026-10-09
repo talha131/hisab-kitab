@@ -12,9 +12,10 @@ travels in the link after `#`, so it is never sent to the server.
 ## Layout
 
 - `docs/` — the report pages, served by GitHub Pages.
-- `memento/bone/` — meat library: field and button scripts
+- `memento/bone/` — meat library (`Beef Meat 🍖`): field and button scripts
   ([notes](memento/bone/NOTES.md)).
-- `memento/vegetables/` — vegetables library (`Sabzi`): CSV and action scripts
+- `memento/vegetables/` — vegetables library (`Vegetables 🥕🍆`) and
+  `Vegetable History`: CSV and action scripts
   ([notes](memento/vegetables/NOTES.md)).
 - `memento/lib/` — shared preview code.
 

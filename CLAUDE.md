@@ -9,11 +9,15 @@ the purchase as a card to share or copy as an image, or save as a PDF. Repo:
 
 - `docs/` — the report pages, served by GitHub Pages from `master` `/docs`:
   `meat.html`, `veg.html`, shared `report.css` and `report.js`.
-- `memento/bone/` — meat library (`Bone` in Memento): field scripts and the
-  Report button script. See its `NOTES.md`.
-- `memento/vegetables/` — vegetables library (`Sabzi` in Memento) and
-  `Vegetable History`: CSV import, Report and Settle library actions. See its
-  `NOTES.md` for the exact setup steps.
+- `memento/bone/` — meat library (`Beef Meat 🍖` in Memento): field scripts
+  and the Report button script. See its `NOTES.md`.
+- `memento/vegetables/` — vegetables library (`Vegetables 🥕🍆` in Memento)
+  and `Vegetable History`: CSV import, Report and Settle library actions. See
+  its `NOTES.md` for the exact setup steps.
+- The folder names predate the library renames (they were `Bone` and
+  `Sabzi`). Library names are free to change, except `Vegetable History`:
+  Settle looks it up by that exact name. The libraries are in Memento's cloud,
+  so family members can be invited to share them.
 - `memento/lib/headless.js` — shared preview code (local server + headless
   Chrome emulating a phone).
 - `tests/report-page.test.js` — tests for the helpers in `docs/report.js`.

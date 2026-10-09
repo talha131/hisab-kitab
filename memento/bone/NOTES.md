@@ -1,4 +1,7 @@
-# Bone library — Memento notes
+# Beef Meat 🍖 library — Memento notes
+
+The library was called `Bone` when this folder was named; the name in
+Memento can change freely, since no script looks it up.
 
 ## Files
 
@@ -19,7 +22,7 @@
 
 ## Setup in Memento
 
-Library `Bone`, one entry per purchase. The scripts look fields up by these
+Library `Beef Meat 🍖`, one entry per purchase. The scripts look fields up by these
 exact names.
 
 1. `Date` (Date, entry name), `Grand Total` (JavaScript, `grand-total.js`),
