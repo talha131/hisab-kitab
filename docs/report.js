@@ -122,6 +122,6 @@ var Report = (function () {
   return {
     rs: rs, amount: amount, date: date, humanDate: humanDate, el: el, isolate: isolate,
     itemRow: itemRow, sumRow: sumRow, emptyRow: emptyRow,
-    setupActions: setupActions, start: start
+    renderImage: renderImage, setupActions: setupActions, start: start
   };
 })();
