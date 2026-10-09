@@ -32,7 +32,9 @@ function dialogs(answer) {
   return { dialog, shown };
 }
 
-function run(file, entries, { history = [], historyMissing = false, failCreateAt = -1, answer = "Settle" } = {}) {
+// `current` is the opened entry for entry actions; without it the script runs
+// as a library action and entry() is undefined.
+function run(file, entries, { history = [], historyMissing = false, failCreateAt = -1, answer = "Settle", current } = {}) {
   const code = fs.readFileSync(path.join(__dirname, file), "utf8");
   const opened = [], messages = [];
   const { dialog, shown } = dialogs(answer);
@@ -43,7 +45,7 @@ function run(file, entries, { history = [], historyMissing = false, failCreateAt
       return { values };
     },
   };
-  vm.runInNewContext(code, {
+  const context = {
     lib: () => ({ entries: () => entries }),
     libByName: (name) => (name === "Vegetable History" ? historyLib : null),
     intent: (action) => {
@@ -53,7 +55,9 @@ function run(file, entries, { history = [], historyMissing = false, failCreateAt
     message: (m) => messages.push(m),
     dialog,
     encodeURIComponent, JSON, Date,
-  });
+  };
+  if (current) context.entry = () => current;
+  vm.runInNewContext(code, context);
   return { opened, messages, history, dialogs: shown };
 }
 
@@ -172,6 +176,73 @@ const cases = [
     assert.strictEqual(history.length, 0);
   }],
 ];
+
+// Vegetable History as Memento lists it: newest first. Two shopping days.
+const historySample = () => table([
+  { Date: new Date(2026, 9, 9, 21, 40), Name: "آلو", English: "Potato", Group: "سبزی", Unit: "کلو", Price: 150, Qty: 2 },
+  { Date: new Date(2026, 9, 8, 23, 59), Name: "پپیتا", English: "Papaya", Group: "پھل", Unit: "عدد", Price: 300, Qty: null },
+  { Date: new Date(2026, 9, 8, 18, 5), Name: "", English: "Mint", Group: "سبزی", Unit: "گڈی", Price: 40, Qty: 2 },
+  { Date: new Date(2026, 9, 8, 18, 5), Name: "انار", English: "Pomegranate", Group: "پھل ", Unit: "کلو", Price: 600, Qty: 1 },
+  { Date: new Date(2026, 9, 8, 0, 1), Name: "آلو", English: "Potato", Group: "سبزی", Unit: "کلو", Price: 700, Qty: 5 },
+]);
+const linkDate = (url) => new URLSearchParams(url.split("#")[1]).get("d");
+
+cases.push(
+  ["history: entry action reports every item of that day, oldest first", () => {
+    const entries = historySample();
+    const { opened } = run("history-report-action.js", entries, { current: entries[3] });
+    assert.strictEqual(opened.length, 1);
+    assert.ok(opened[0].startsWith("https://talha131.github.io/hisab-kitab/veg.html#d="));
+    assert.strictEqual(linkDate(opened[0]), "2026-10-08", "purchase day, not today");
+    assert.deepStrictEqual(linkRows(opened[0]), [
+      ["s", "آلو", "Potato", 700, 5, "کلو"],
+      ["p", "انار", "Pomegranate", 600, 1, "کلو"],
+      ["s", "Mint", "Mint", 40, 2, "گڈی"],
+      ["p", "پپیتا", "Papaya", 300, 0, "عدد"],
+    ]);
+  }],
+  ["history: other days are left out", () => {
+    const entries = historySample();
+    const { opened } = run("history-report-action.js", entries, { current: entries[0] });
+    assert.strictEqual(linkDate(opened[0]), "2026-10-09");
+    assert.deepStrictEqual(linkRows(opened[0]), [["s", "آلو", "Potato", 150, 2, "کلو"]]);
+  }],
+  ["history: Date stored as string or number still matches the day", () => {
+    const entries = table([
+      { Date: new Date(2026, 9, 8, 9, 0).getTime(), Name: "آلو", Group: "سبزی", Price: 700 },
+      { Date: new Date(2026, 9, 8, 20, 0).toString(), Name: "پیاز", Group: "سبزی", Price: 800 },
+      { Date: new Date(2026, 9, 7, 20, 0).getTime(), Name: "ٹماٹر", Group: "سبزی", Price: 400 },
+    ]);
+    const { opened } = run("history-report-action.js", entries, { current: entries[0] });
+    assert.strictEqual(linkDate(opened[0]), "2026-10-08");
+    assert.deepStrictEqual(linkRows(opened[0]).map((r) => r[1]), ["پیاز", "آلو"]);
+  }],
+  ["history: fruit variants and zero prices", () => {
+    const entries = table([
+      { Date: new Date(2026, 9, 8), Name: "کیلا", Group: " پهل", Price: 300 },
+      { Date: new Date(2026, 9, 8), Name: "سیب", Group: "Fruit", Price: 500 },
+      { Date: new Date(2026, 9, 8), Name: "ادرک", Group: "", Price: 0 },
+    ]);
+    const { opened } = run("history-report-action.js", entries, { current: entries[0] });
+    assert.deepStrictEqual(linkRows(opened[0]).map((r) => [r[0], r[1]]), [["p", "سیب"], ["p", "کیلا"]]);
+  }],
+  ["history: library action reports the most recent day", () => {
+    const { opened } = run("history-report-action.js", historySample());
+    assert.strictEqual(linkDate(opened[0]), "2026-10-09");
+    assert.deepStrictEqual(linkRows(opened[0]).map((r) => r[1]), ["آلو"]);
+  }],
+  ["history: a day with nothing priced shows a message", () => {
+    const entries = table([{ Date: new Date(2026, 9, 8), Name: "آلو", Price: null }]);
+    const { opened, messages } = run("history-report-action.js", entries, { current: entries[0] });
+    assert.strictEqual(opened.length, 0);
+    assert.deepStrictEqual(messages, ["No items for this day"]);
+  }],
+  ["history: empty library shows a message", () => {
+    const { opened, messages } = run("history-report-action.js", []);
+    assert.strictEqual(opened.length, 0);
+    assert.deepStrictEqual(messages, ["No items for this day"]);
+  }],
+);
 
 let failed = 0;
 for (const [name, test] of cases) {
