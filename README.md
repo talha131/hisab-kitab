@@ -14,8 +14,8 @@ travels in the link after `#`, so it is never sent to the server.
 - `docs/` — the report pages, served by GitHub Pages.
 - `memento/bone/` — meat library: field and button scripts
   ([notes](memento/bone/NOTES.md)).
-- `memento/vegetables/` — vegetables library: CSV and action scripts
+- `memento/vegetables/` — vegetables library (`Sabzi`): CSV and action scripts
   ([notes](memento/vegetables/NOTES.md)).
 
 Each library folder has tests (`node test.js`) and a preview tool
-(`node preview.js`).
+(`node preview.js`); `node tests/report-page.test.js` tests the pages' helpers.
