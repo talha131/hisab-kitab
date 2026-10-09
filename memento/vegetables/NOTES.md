@@ -1,8 +1,8 @@
 # Sabzi (vegetables) library — Memento notes
 
 One entry per vegetable; the library's table view is the shopping sheet.
-Fill **Price** (what the vendor says) for what was bought, optionally **Qty**
-and **Unit**, then run the actions.
+Fill **Price** (the amount paid for that item, not a rate per kg) for what
+was bought, optionally **Qty** and **Unit**, then run the actions.
 
 ## Files
 
@@ -10,9 +10,12 @@ and **Unit**, then run the actions.
   (Urdu), English, Group (سبزی / پھل), Unit, Price, Qty.
 - `report-action.js` — library action **Report**: opens
   <https://talha131.github.io/hisab-kitab/veg.html> with every priced row, in
-  Order. Vegetables first with a کل سبزی subtotal, then fruit.
+  Order. Vegetables first, then fruit; a کل سبزی subtotal appears when both
+  were bought. Group is typed by hand, so anything starting with پ counts as
+  fruit and everything else as a vegetable.
 - `settle-action.js` — library action **Settle**: copies priced rows into the
-  `Vegetable History` library with today's date, then clears Price and Qty.
+  `Vegetable History` library with today's date (Group saved as پھل or
+  سبزی), then clears Price and Qty.
   It clears nothing if the history library can't be reached, and stops at the
   first row it fails to save.
 - `node test.js` — tests both actions against a stubbed Memento API.
