@@ -109,6 +109,13 @@ const cases = [
     assert.deepStrictEqual(run("settle-action.js", rows()).history.map((h) => h.Group),
       groups.map(([, want]) => (want === "p" ? "پھل" : "سبزی")));
   }],
+  ["report: missing Urdu name falls back to English, then ?", () => {
+    const { opened } = run("report-action.js", table([
+      { Order: 1, Name: "", English: "Iceberg", Group: "سبزی", Price: 150 },
+      { Order: 2, Name: null, English: null, Group: "سبزی", Price: 50 },
+    ]));
+    assert.deepStrictEqual(linkRows(opened[0]).map((r) => [r[1], r[3]]), [["Iceberg", 150], ["?", 50]]);
+  }],
   ["settle: nothing priced", () => {
     const { history, messages } = run("settle-action.js", table([{ Order: 1, Name: "آلو", Price: null }]));
     assert.strictEqual(history.length, 0);
