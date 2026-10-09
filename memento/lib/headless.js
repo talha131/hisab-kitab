@@ -3,6 +3,7 @@
 //   <name>.png        what the phone screen shows
 //   <name>-share.png  the image the "Share image" button produces
 //   <name>.pdf        what "Save PDF" (print, A5) produces
+// and checks that "Copy image" puts a PNG on the clipboard.
 const fs = require("fs");
 const http = require("http");
 const os = require("os");
@@ -49,6 +50,29 @@ async function connect(chrome) {
   return { send, close: () => ws.close() };
 }
 
+// Taps "Copy image" like a user would and returns the size of the PNG on the
+// clipboard, or the page's status message if the copy failed.
+async function copyImage(cdp) {
+  const eval_ = async (expression) => (await cdp.send("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true })).result.value;
+  // Long reports push the button below the screen; bring it into view first.
+  const box = await eval_("(() => { const b = document.getElementById('copy'); b.scrollIntoView({ block: 'center' }); const r = b.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()");
+  for (const type of ["mousePressed", "mouseReleased"]) {
+    await cdp.send("Input.dispatchMouseEvent", { type, x: box[0], y: box[1], button: "left", clickCount: 1 });
+  }
+  const status = await eval_(`new Promise((resolve) => {
+    const started = Date.now();
+    const text = () => document.getElementById('status').textContent;
+    const tick = () => {
+      if (/copied|Could not|can't/.test(text())) resolve(text());
+      else if (Date.now() - started > 15000) resolve("no result after 15 s; status: " + text());
+      else setTimeout(tick, 100);
+    };
+    tick();
+  })`);
+  if (!/copied/.test(status)) return status;
+  return eval_("navigator.clipboard.read().then((items) => items[0].getType('image/png')).then((b) => b.size)");
+}
+
 // pages: { name: "page.html#fragment" }
 async function preview(pages, outDir) {
   fs.rmSync(outDir, { recursive: true, force: true });
@@ -59,6 +83,11 @@ async function preview(pages, outDir) {
   try {
     const cdp = await connect(chrome);
     await cdp.send("Emulation.setDeviceMetricsOverride", PHONE);
+    await cdp.send("Emulation.setFocusEmulationEnabled", { enabled: true });
+    await cdp.send("Browser.grantPermissions", {
+      permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"],
+      origin: `http://127.0.0.1:${server.address().port}`,
+    });
     for (const [name, page] of Object.entries(pages)) {
       const url = `http://127.0.0.1:${server.address().port}/${page}`;
       await cdp.send("Page.navigate", { url });
@@ -74,6 +103,8 @@ async function preview(pages, outDir) {
       });
       if (share.exceptionDetails) throw new Error("share image failed: " + JSON.stringify(share.exceptionDetails));
       fs.writeFileSync(path.join(outDir, name + "-share.png"), Buffer.from(share.result.value.split(",")[1], "base64"));
+      const copied = await copyImage(cdp);
+      if (!(copied > 0)) throw new Error("Copy image put no PNG on the clipboard: " + copied);
       const pdf = await cdp.send("Page.printToPDF", { preferCSSPageSize: true, printBackground: true });
       fs.writeFileSync(path.join(outDir, name + ".pdf"), Buffer.from(pdf.data, "base64"));
       console.log(name + ": " + url);
