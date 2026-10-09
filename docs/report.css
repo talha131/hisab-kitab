@@ -59,7 +59,11 @@ tr.net td { background: var(--brand); color: #ffffff; font-size: 21px; font-weig
   font-family: var(--latin); font-size: 16px; font-weight: 700; cursor: pointer;
 }
 #share { background: var(--brand); color: #ffffff; }
-#copy, #pdf { background: #ffffff; color: var(--brand); border: 1.5px solid var(--brand); }
+#copy { background: #ffffff; color: var(--brand); border: 1.5px solid var(--brand); }
+/* Save PDF is a secondary action: a small text button under the main ones. */
+.more { margin-top: 6px; text-align: center; }
+#pdf { min-height: 40px; padding: 0 12px; border: 0; background: none; color: var(--muted);
+  font-family: var(--latin); font-size: 14px; text-decoration: underline; cursor: pointer; }
 #status { margin-top: 10px; text-align: center; font-family: var(--latin); font-size: 13px; color: var(--muted); direction: ltr; }
 
 @media print {
@@ -67,6 +71,6 @@ tr.net td { background: var(--brand); color: #ffffff; font-size: 21px; font-weig
   body { background: #ffffff; }
   main { padding: 0; max-width: none; }
   #capture { padding: 0; }
-  .actions, #status { display: none; }
+  .actions, .more, #status { display: none; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
