@@ -13,11 +13,12 @@ was bought, optionally **Qty** and **Unit**, then run the actions.
   Order. Vegetables first, then fruit; a کل سبزی subtotal appears when both
   were bought. Group is typed by hand, so anything starting with پ counts as
   fruit and everything else as a vegetable.
-- `settle-action.js` — library action **Settle**: copies priced rows into the
-  `Vegetable History` library with today's date (Group saved as پھل or
-  سبزی), then clears Price and Qty.
-  It clears nothing if the history library can't be reached, and stops at the
-  first row it fails to save.
+- `settle-action.js` — library action **Settle**: first asks "Settle? Save N
+  items to Vegetable History and clear their prices?" (Cancel changes
+  nothing), then copies priced rows into the `Vegetable History` library with
+  today's date (Group saved as پھل or سبزی) and clears Price and Qty.
+  With nothing priced, or if the history library can't be reached, it only
+  shows a message; it stops at the first row it fails to save.
 - `node test.js` — tests both actions against a stubbed Memento API.
 - `node preview.js` — renders sample reports into `preview/`.
 
