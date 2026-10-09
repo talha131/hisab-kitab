@@ -1,7 +1,8 @@
 // Previews report pages: serves docs/ locally, opens each page in headless
 // Chrome emulating a phone, and writes into <outDir>:
 //   <name>.png        what the phone screen shows
-//   <name>-share.png  the image the "Share image" button produces
+//   <name>-share.png  the image "Share image" and "Copy image" produce
+//                     (rendered by the page's own Report.renderImage)
 //   <name>.pdf        what "Save PDF" (print, A5) produces
 // and checks that "Copy image" puts a PNG on the clipboard.
 const fs = require("fs");
@@ -98,7 +99,8 @@ async function preview(pages, outDir) {
       const shot = await cdp.send("Page.captureScreenshot", { format: "png" });
       fs.writeFileSync(path.join(outDir, name + ".png"), Buffer.from(shot.data, "base64"));
       const share = await cdp.send("Runtime.evaluate", {
-        expression: "htmlToImage.toPng(document.getElementById('capture'), { pixelRatio: 2, backgroundColor: '#ffffff' })",
+        // The page's own renderer, so this is exactly what Share image sends.
+        expression: "Report.renderImage().then((blob) => new Promise((resolve) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.readAsDataURL(blob); }))",
         awaitPromise: true, returnByValue: true,
       });
       if (share.exceptionDetails) throw new Error("share image failed: " + JSON.stringify(share.exceptionDetails));
