@@ -25,7 +25,8 @@ main { max-width: 440px; margin: 0 auto; padding: 16px; }
 table { width: 100%; border-collapse: collapse; }
 td { padding: 6px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
 .num { font-family: var(--latin); direction: ltr; unicode-bidi: isolate; }
-td.name { text-align: right; }
+/* overflow-wrap: one long unbroken name must not push the amounts off the card. */
+td.name { text-align: right; overflow-wrap: anywhere; }
 td.name .ur { font-size: 19px; line-height: 1.9; }
 td.name .en { font-family: var(--latin); font-size: 11px; color: var(--muted); direction: ltr; text-align: right; }
 td.qty { text-align: center; white-space: nowrap; padding: 6px 4px; }
