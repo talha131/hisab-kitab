@@ -68,7 +68,7 @@ var Report = (function () {
     return tr;
   }
 
-  // Wires the Share image and Save PDF buttons. fileName() names the PNG.
+  // Wires the Share image, Copy image and Save PDF buttons. fileName() names the PNG.
   // The report card as a PNG blob, once the Urdu font has loaded.
   function renderImage() {
     return document.fonts.ready.then(function () {
@@ -97,6 +97,18 @@ var Report = (function () {
           if (err && err.name === "AbortError") { status.textContent = ""; return; }
           status.textContent = "Could not share the image: " + (err && err.message || err);
         });
+    });
+    document.getElementById("copy").addEventListener("click", function () {
+      if (!(navigator.clipboard && navigator.clipboard.write && window.ClipboardItem)) {
+        status.textContent = "This browser can't copy images. Use Share image instead.";
+        return;
+      }
+      status.textContent = "Copying image…";
+      // Hand ClipboardItem the pending image so the copy still counts as part
+      // of the tap while the image renders.
+      navigator.clipboard.write([new ClipboardItem({ "image/png": renderImage() })])
+        .then(function () { status.textContent = "Image copied. Paste it in WhatsApp."; })
+        .catch(function (err) { status.textContent = "Could not copy the image: " + (err && err.message || err); });
     });
     document.getElementById("pdf").addEventListener("click", function () { window.print(); });
   }

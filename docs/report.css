@@ -59,7 +59,7 @@ tr.net td { background: var(--brand); color: #ffffff; font-size: 21px; font-weig
   font-family: var(--latin); font-size: 16px; font-weight: 700; cursor: pointer;
 }
 #share { background: var(--brand); color: #ffffff; }
-#pdf { background: #ffffff; color: var(--brand); border: 1.5px solid var(--brand); }
+#copy, #pdf { background: #ffffff; color: var(--brand); border: 1.5px solid var(--brand); }
 #status { margin-top: 10px; text-align: center; font-family: var(--latin); font-size: 13px; color: var(--muted); direction: ltr; }
 
 @media print {
