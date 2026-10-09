@@ -14,9 +14,28 @@ function table(rows) {
   }));
 }
 
-function run(file, entries, { history = [], historyMissing = false, failCreateAt = -1 } = {}) {
+// A fake Memento dialog(): records each dialog shown and taps the button
+// labelled `answer` (null leaves it unanswered).
+function dialogs(answer) {
+  const shown = [];
+  const dialog = () => {
+    const d = { buttons: {} };
+    const api = {
+      title(t) { d.title = t; return api; },
+      text(t) { d.text = t; return api; },
+      positiveButton(label, fn) { d.buttons[label] = fn; return api; },
+      negativeButton(label, fn) { d.buttons[label] = fn; return api; },
+      show() { shown.push(d); if (answer && d.buttons[answer]) d.buttons[answer](); },
+    };
+    return api;
+  };
+  return { dialog, shown };
+}
+
+function run(file, entries, { history = [], historyMissing = false, failCreateAt = -1, answer = "Settle" } = {}) {
   const code = fs.readFileSync(path.join(__dirname, file), "utf8");
   const opened = [], messages = [];
+  const { dialog, shown } = dialogs(answer);
   const historyLib = historyMissing ? null : {
     create(values) {
       if (history.length === failCreateAt) return null;
@@ -32,9 +51,10 @@ function run(file, entries, { history = [], historyMissing = false, failCreateAt
       return { data: (u) => opened.push(u), send: () => {} };
     },
     message: (m) => messages.push(m),
+    dialog,
     encodeURIComponent, JSON, Date,
   });
-  return { opened, messages, history };
+  return { opened, messages, history, dialogs: shown };
 }
 
 function linkRows(url) {
