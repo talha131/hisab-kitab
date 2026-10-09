@@ -32,7 +32,7 @@ const cases = [
   ["price: tripe field names", "price-tripe.js",
     { "Weight Tripe": 2, "Rate Tripe": 700 }, 1400],
 
-  ["grand total: your meat example", "grand-total.js",
+  ["grand total: sample purchase", "grand-total.js",
     { "Weight Boneless": 3, "Rate Boneless": 1800,
       "Weight Bone-in": 5, "Rate Bone-in": 1500 }, 12900],
   ["grand total: mixes manual and computed lines", "grand-total.js",

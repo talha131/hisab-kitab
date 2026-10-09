@@ -1,4 +1,4 @@
-// Settle · حساب بند — library action for the Vegetables library.
+// Settle · حساب بند — library action for the Sabzi library.
 // After paying: copies every vegetable with a price into the Vegetable History
 // library with today's date, then clears Price and Qty so the table is ready
 // for the next purchase. Unit is kept as each vegetable's usual unit.

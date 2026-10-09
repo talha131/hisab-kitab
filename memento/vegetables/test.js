@@ -1,11 +1,11 @@
-// Runs the Vegetables library actions against a stubbed Memento API.
+// Runs the Sabzi library actions against a stubbed Memento API.
 // Usage: node test.js
 const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 const assert = require("assert");
 
-// A fake Vegetables table: one entry per vegetable, values by field name.
+// A fake Sabzi table: one entry per vegetable, values by field name.
 function table(rows) {
   return rows.map((values) => ({
     values: { ...values },
