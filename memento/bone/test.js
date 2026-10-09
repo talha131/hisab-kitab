@@ -119,11 +119,18 @@ for (const [name, values, expected] of buttonCases) {
   }
 }
 
-// Every per-meat script must be empty (not 0) when nothing was bought, so the
-// PDF report's class="v{{Price X}}" becomes "v" and the row is hidden.
-for (const f of fs.readdirSync(__dirname).filter((f) => f.startsWith("price-"))) {
-  assert.strictEqual(run(f, {}), null, f + " should be empty when nothing was bought");
+// Every per-meat script must be empty (not 0) when nothing was bought.
+const priceFiles = fs.readdirSync(__dirname).filter((f) => f.startsWith("price-"));
+for (const f of priceFiles) {
+  const name = f + ": empty when nothing was bought";
+  try {
+    assert.strictEqual(run(f, {}), null);
+    console.log("ok   " + name);
+  } catch (e) {
+    failed++;
+    console.log("FAIL " + name + ": " + e.message);
+  }
 }
 
-console.log(failed ? `\n${failed} failed` : `\nall ${cases.length + buttonCases.length} passed`);
+console.log(failed ? `\n${failed} failed` : `\nall ${cases.length + buttonCases.length + priceFiles.length} passed`);
 process.exit(failed ? 1 : 0);
