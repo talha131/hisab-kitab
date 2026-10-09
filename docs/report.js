@@ -69,14 +69,18 @@ var Report = (function () {
   }
 
   // Wires the Share image and Save PDF buttons. fileName() names the PNG.
+  // The report card as a PNG blob, once the Urdu font has loaded.
+  function renderImage() {
+    return document.fonts.ready.then(function () {
+      return htmlToImage.toBlob(document.getElementById("capture"), { pixelRatio: 3, backgroundColor: "#ffffff" });
+    });
+  }
+
   function setupActions(fileName) {
     var status = document.getElementById("status");
     document.getElementById("share").addEventListener("click", function () {
       status.textContent = "Preparing image…";
-      document.fonts.ready
-        .then(function () {
-          return htmlToImage.toBlob(document.getElementById("capture"), { pixelRatio: 3, backgroundColor: "#ffffff" });
-        })
+      renderImage()
         .then(function (blob) {
           var file = new File([blob], fileName(), { type: "image/png" });
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
