@@ -12,7 +12,8 @@ the purchase as a card to share or copy as an image, or save as a PDF. Repo:
 - `memento/bone/` — meat library (`Beef Meat 🍖` in Memento): field scripts
   and the Report button script. See its `NOTES.md`.
 - `memento/vegetables/` — vegetables library (`Vegetables 🥕🍆` in Memento)
-  and `Vegetable History`: CSV import, Report and Settle library actions. See
+  and `Vegetable History`: CSV import, Report and Settle library actions, and
+  a Report action on Vegetable History for past days. See
   its `NOTES.md` for the exact setup steps.
 - The folder names predate the library renames (they were `Bone` and
   `Sabzi`). Library names are free to change, except `Vegetable History`:

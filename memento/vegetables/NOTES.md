@@ -23,7 +23,13 @@ was bought, optionally **Qty** and **Unit**, then run the actions.
   today's date (Group saved as پھل or سبزی) and clears Price and Qty.
   With nothing priced, or if the history library can't be reached, it only
   shows a message; it stops at the first row it fails to save.
-- `node test.js` — tests both actions against a stubbed Memento API.
+- `history-report-action.js` — **Report** action for `Vegetable History`:
+  re-opens the same report page for a past (paid) shopping day, dated with
+  the purchase day. Added as an entry action it reports the day of the opened
+  entry; added as a library action it reports the most recent day. It assumes
+  Memento lists entries newest first, so items appear in the order Settle
+  saved them (the page still puts vegetables before fruit).
+- `node test.js` — tests the actions against a stubbed Memento API.
 - `node preview.js` — renders sample reports into `preview/`.
 
 ## Setup in Memento (as done on the phone, Oct 2026)
@@ -47,6 +53,13 @@ was bought, optionally **Qty** and **Unit**, then run the actions.
    Settle. Paste the scripts from GitHub ("Copy" under the code's ⋯ menu,
    which keeps the Urdu intact). Permissions for scripts → Available
    libraries: only `Vegetable History`.
+6. Vegetable History → Automations → Scripts → + Action, Place of action:
+   Entry, name it `Report`, paste `history-report-action.js`. It needs no
+   extra permissions. Optionally add the same script again with Place of
+   action: Library, for a one-tap report of the most recent day.
+
+To re-send a past report: open Vegetable History, open any item of that day,
+tap the action button (▶ / ⋮) → Report.
 
 The library actions run from the ▶ button in the library's toolbar. Both
 libraries are in Memento's cloud, so family members can be invited to share
