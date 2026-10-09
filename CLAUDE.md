@@ -71,7 +71,9 @@ pushed commit, then confirm each live `docs/` file matches the local one
   untrusted and render it as text only.
 - Scripts are pasted on the phone from GitHub (file page → code ⋯ menu →
   Copy), which keeps Urdu string literals intact. `adb shell input text`
-  cannot type Urdu.
+  cannot type Urdu. When updating a script, open the file at its commit
+  (`…/blob/<sha>/path`): Chrome may show a cached copy of `…/blob/master/…`
+  and paste the old version. Check the pasted script before saving.
 - When driving the phone over adb, tap menu items by their text (uiautomator
   dump), not by remembered coordinates; menu positions shift.
 
