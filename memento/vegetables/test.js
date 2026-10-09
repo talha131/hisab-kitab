@@ -99,6 +99,16 @@ const cases = [
     assert.strictEqual(entries[2].values.Price, 50, "unsaved row keeps its price");
     assert.match(messages[0], /Could not save/);
   }],
+  ["report and settle: hand-typed Group variants", () => {
+    // Group is a text field, so a trailing space, a look-alike Arabic heh or
+    // English must still land in the right section.
+    const groups = [["پھل ", "p"], [" پھل", "p"], ["پهل", "p"], ["Fruit", "p"], ["سبزی", "s"], ["", "s"]];
+    const rows = () => table(groups.map(([g], i) => ({ Order: i + 1, Name: "x" + i, Group: g, Price: 10 })));
+    assert.deepStrictEqual(linkRows(run("report-action.js", rows()).opened[0]).map((r) => r[0]),
+      groups.map(([, want]) => want));
+    assert.deepStrictEqual(run("settle-action.js", rows()).history.map((h) => h.Group),
+      groups.map(([, want]) => (want === "p" ? "پھل" : "سبزی")));
+  }],
   ["settle: nothing priced", () => {
     const { history, messages } = run("settle-action.js", table([{ Order: 1, Name: "آلو", Price: null }]));
     assert.strictEqual(history.length, 0);
