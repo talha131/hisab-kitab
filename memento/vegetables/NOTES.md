@@ -1,4 +1,4 @@
-# Vegetables library — Memento notes
+# Sabzi (vegetables) library — Memento notes
 
 One entry per vegetable; the library's table view is the shopping sheet.
 Fill **Price** (what the vendor says) for what was bought, optionally **Qty**
@@ -6,7 +6,7 @@ and **Unit**, then run the actions.
 
 ## Files
 
-- `vegetables.csv` — import to create the `Vegetables` library: Order, Name
+- `vegetables.csv` — import to create the `Sabzi` library: Order, Name
   (Urdu), English, Group (سبزی / پھل), Unit, Price, Qty.
 - `report-action.js` — library action **Report**: opens
   <https://talha131.github.io/hisab-kitab/veg.html> with every priced row, in
@@ -18,14 +18,25 @@ and **Unit**, then run the actions.
 - `node test.js` — tests both actions against a stubbed Memento API.
 - `node preview.js` — renders sample reports into `preview/`.
 
-## Setup in Memento
+## Setup in Memento (as done on the phone, Oct 2026)
 
-1. Import `vegetables.csv` as a new library named `Vegetables`. Field types:
-   Order → Integer, Name → Text (entry title), English → Text,
-   Group → Single choice (سبزی, پھل), Unit → Single choice (کلو, پاؤ, عدد,
-   گڈی, درجن), Price → Integer, Qty → Real number. Turn on direct edit for
-   Price, Qty and Unit, and sort the table view by Order.
-2. Create a library `Vegetable History` with fields Date (Date),
-   Name, English, Group, Unit (Text), Price (Integer), Qty (Real number).
-3. In `Vegetables`, add two library actions with the scripts above. Give the
-   Settle script permission to access the `Vegetable History` library.
+1. Add Library → Import from CSV → `vegetables.csv`. On the import screen:
+   name the library `Sabzi`, set Name's "Display as" to Entry name and
+   Order's to Regular field, Price → Integer, Qty → Real number. The import
+   offers no dropdown types, so Group and Unit come in as Text.
+2. Edit library → Unit → Convert data type → Single-choice list. The
+   choices (کلو, پاؤ, عدد, گڈی, درجن) are created from the existing values,
+   but only show up after the library is saved; delete the "Unit Old" backup
+   once the values check out. Group stays Text: it never changes per
+   vegetable, and converting it lost its values.
+3. Price, Qty, Unit → Direct edit: card entry and table entries. Library
+   menu → View: Table, Sort: by Order ASC.
+4. New library `Vegetable History`: Date (Date), Name (Text), English, Group,
+   Unit (Text), Price (Integer), Qty (Real number). Date and Name are the
+   entry name.
+5. Sabzi → Automations → Scripts → + Action (place: Library) for Report and
+   Settle. Paste the scripts from GitHub ("Copy" under the code's ⋯ menu,
+   which keeps the Urdu intact). Permissions for scripts → Available
+   libraries: only `Vegetable History`.
+
+The library actions run from the ▶ button in Sabzi's toolbar.
